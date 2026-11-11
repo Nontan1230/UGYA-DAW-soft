@@ -6,430 +6,475 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UGYA DAW</title>
 <style>
-* { box-sizing: border-box; }
-body {
-  margin: 0;
-  background: #17191e;
-  color: #e8eaf0;
-  font-family: Arial, sans-serif;
-}
-button, input { font: inherit; }
-button {
-  color: white;
-  background: #30343e;
-  border: 1px solid #484e5b;
-  padding: 9px 13px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-button:hover { background: #444b59; }
-header {
-  height: 64px;
-  background: #22252c;
-  display: flex;
-  align-items: center;
-  padding: 0 22px;
-  border-bottom: 1px solid #383c46;
-}
-header h1 { font-size: 21px; }
-.transport {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-input {
-  background: #30343e;
-  color: white;
-  border: 1px solid #484e5b;
-  padding: 8px;
-  border-radius: 5px;
-  width: 65px;
-}
-main {
-  display: grid;
-  grid-template-columns: 245px minmax(0,1fr);
-  height: calc(100vh - 64px);
-}
-aside {
-  background: #20232a;
-  border-right: 1px solid #383c46;
-  padding: 16px;
-  overflow-y: auto;
-}
-.section-title {
-  color: #aeb5c3;
-  font-size: 12px;
-  font-weight: bold;
-  margin: 22px 0 10px;
-  letter-spacing: 1px;
-}
-.menu-item {
-  padding: 12px;
-  background: #2b2f38;
-  border-radius: 6px;
-  margin-bottom: 7px;
-  cursor: pointer;
-}
-.menu-item:hover, .menu-item.active {
-  background: #414754;
-}
-.workspace {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.toolbar {
-  height: 58px;
-  flex-shrink: 0;
-  background: #242830;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 12px;
-}
-.toolbar span { color: #aeb5c3; }
-.timeline {
-  flex: 1;
-  overflow: auto;
-  padding: 18px;
-}
-.track {
-  display: flex;
-  height: 75px;
-  margin-bottom: 8px;
-  background: #252932;
-  border-radius: 5px;
-  overflow: hidden;
-}
-.track-name {
-  width: 150px;
-  flex-shrink: 0;
-  background: #30343e;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-}
-.track-name small { color: #aeb5c3; }
-.track-content {
-  flex: 1;
-  min-width: 300px;
-  background-image: linear-gradient(
-    90deg, transparent 98%, #3b404a 98%
-  );
-  background-size: 60px 100%;
-}
-.delete-track {
-  font-size: 11px;
-  padding: 3px 6px;
-  width: fit-content;
-}
-.empty {
-  height: 100%;
-  min-height: 260px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #aeb5c3;
-  text-align: center;
-  gap: 12px;
-}
-.empty strong { font-size: 19px; color: white; }
-.empty .symbol { font-size: 42px; }
-.help {
-  background: #20232a;
-  border-top: 1px solid #383c46;
-  padding: 15px 22px;
-  min-height: 95px;
-  flex-shrink: 0;
-}
-.help h3 { margin: 0 0 7px; font-size: 13px; }
-.help p { margin: 0; font-size: 12px; color: #aeb5c3; }
-.modal {
-  position: fixed;
-  inset: 0;
-  background: #0009;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 5;
-  padding: 15px;
-}
-.modal.open { display: flex; }
-.modal-content {
-  background: #252932;
-  border: 1px solid #484e5b;
-  border-radius: 12px;
-  width: min(650px, 100%);
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 22px;
-}
-.modal-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.modal-head h2 { margin: 0; }
-.categories {
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-  margin: 18px 0;
-}
-.category { font-size: 12px; }
-.category.active { background: #596f9a; }
-.instrument-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(155px,1fr));
-  gap: 10px;
-}
-.instrument-card {
-  background: #30343e;
-  border: 1px solid #484e5b;
-  padding: 15px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.instrument-card:hover, .instrument-card.selected {
-  border-color: #7ca9e2;
-  background: #394457;
-}
-.instrument-card .emoji { font-size: 28px; }
-.instrument-card h3 { margin: 10px 0 5px; font-size: 14px; }
-.instrument-card p { margin: 0; font-size: 11px; color: #aeb5c3; }
-.detail {
-  margin-top: 17px;
-  padding: 15px;
-  background: #1d2027;
-  border-radius: 8px;
-}
-.detail h3 { margin-top: 0; }
-.add-button { background: #526f9b; }
-@media(max-width:650px) {
-  main { grid-template-columns: 125px minmax(0,1fr); }
-  aside { padding: 8px; }
-  .track-name { width: 90px; }
-  header { padding: 0 10px; }
+*{box-sizing:border-box}
+body{margin:0;background:#17191e;color:#e8eaf0;font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{background:#30343e;color:white;border:1px solid #484e5b;border-radius:6px;padding:9px 13px;cursor:pointer}
+button:hover{background:#454c5a}
+input{background:#30343e;color:white;border:1px solid #484e5b;border-radius:5px;padding:8px}
+.hidden{display:none!important}
+
+/* HOME */
+#home{min-height:100vh;padding:55px max(25px,8vw);background:radial-gradient(ellipse at 80% 0%,#303c50 0%,#20232b 45%,#17191e 100%)}
+.home-header{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:27px;font-weight:bold;letter-spacing:1px}
+.home-main{max-width:1050px;margin:100px auto}
+.home-main h2{font-size:34px;margin-bottom:10px}
+.home-sub{color:#aeb5c3;margin-bottom:35px}
+.home-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.home-card{background:#292e38;border:1px solid #454c59;border-radius:12px;padding:25px;cursor:pointer;min-height:145px}
+.home-card:hover{background:#343c49;border-color:#7896bd}
+.home-card .big-icon{font-size:32px}
+.home-card h3{margin:15px 0 7px}
+.home-card p{color:#aeb5c3;font-size:13px;margin:0}
+.recent-title{margin-top:55px;color:#aeb5c3;font-size:13px;letter-spacing:1px}
+.recent-item{padding:14px 5px;border-bottom:1px solid #383c46;cursor:pointer}
+.recent-item:hover{background:#ffffff0b}
+.recent-item small{display:block;color:#8993a4;margin-top:5px}
+
+/* PROJECT */
+#project{height:100vh;display:flex;flex-direction:column}
+header{height:58px;flex-shrink:0;background:#22252c;border-bottom:1px solid #383c46;display:flex;align-items:center;padding:0 16px;gap:17px}
+header .logo{font-size:20px}
+.header-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+main{display:grid;grid-template-columns:225px minmax(0,1fr);flex:1;min-height:0}
+aside{background:#20232a;border-right:1px solid #383c46;padding:14px;overflow:auto}
+.section-title{font-size:11px;color:#aeb5c3;font-weight:bold;letter-spacing:1px;margin:20px 0 9px}
+.menu-item{padding:11px;background:#2b2f38;border-radius:6px;margin-bottom:7px;cursor:pointer;font-size:13px}
+.menu-item:hover{background:#414754}
+.workspace{min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.toolbar{height:48px;flex-shrink:0;background:#242830;display:flex;align-items:center;padding:0 16px;gap:12px}
+.toolbar span{font-size:12px;color:#aeb5c3}
+.timeline-scroll{flex:1;min-height:0;overflow:auto;padding:12px;background:#17191e}
+.ruler-row{display:flex;position:sticky;top:0;z-index:2;background:#20232a;height:30px}
+.ruler-label{width:140px;flex-shrink:0;background:#30343e}
+.ruler{height:30px;position:relative;background:#242830;border-bottom:1px solid #484e5b}
+.ruler-mark{position:absolute;top:7px;font-size:10px;color:#aeb5c3}
+.track{display:flex;height:68px;margin-bottom:6px;background:#252932;border-radius:4px;overflow:hidden}
+.track-name{width:140px;flex-shrink:0;background:#30343e;padding:9px;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.track-name strong{font-size:12px}
+.track-name button{font-size:10px;padding:3px;width:fit-content}
+.track-content{position:relative;flex-shrink:0;background-image:linear-gradient(90deg,transparent 98%,#414650 98%);background-size:60px 100%}
+.empty{min-height:300px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:#aeb5c3;text-align:center}
+.empty strong{font-size:20px;color:white}
+.empty-icon{font-size:42px}
+.playhead{position:absolute;top:0;bottom:0;width:2px;background:#ed7474;z-index:1;pointer-events:none}
+.playhead:before{content:"";position:absolute;top:0;left:-5px;border-left:6px solid transparent;border-right:6px solid transparent;border-top:9px solid #ed7474}
+.zoom-tools{display:flex;align-items:center;gap:7px;margin-left:auto}
+.zoom-tools button{padding:4px 9px}
+.zoom-tools span{min-width:45px;text-align:center}
+
+/* TRANSPORT */
+.transport{height:65px;flex-shrink:0;background:#22252c;border-top:1px solid #414650;display:flex;align-items:center;gap:9px;padding:0 15px}
+.transport button{min-width:37px}
+.transport .play{background:#526f9b}
+.transport .record{color:#ff7777}
+.time-display{font-family:monospace;font-size:16px;margin:0 12px}
+.transport label{font-size:12px;color:#aeb5c3}
+.transport input{width:62px}
+.loop-active{border-color:#8bb6e8;background:#394c65}
+.help{height:75px;flex-shrink:0;background:#20232a;border-top:1px solid #383c46;padding:11px 18px}
+.help h3{font-size:12px;margin:0 0 6px}
+.help p{font-size:11px;color:#aeb5c3;margin:0}
+
+/* LIBRARY */
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:10;padding:15px}
+.modal.open{display:flex}
+.modal-content{background:#252932;border:1px solid #484e5b;border-radius:12px;width:min(700px,100%);max-height:85vh;overflow:auto;padding:20px}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.modal-head h2{font-size:19px}
+.categories{display:flex;flex-wrap:wrap;gap:6px;margin:15px 0}
+.category.active{background:#526f9b}
+.instrument-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:9px}
+.instrument-card{background:#30343e;border:1px solid #484e5b;border-radius:7px;padding:13px;cursor:pointer}
+.instrument-card.selected,.instrument-card:hover{border-color:#80a8dc;background:#394457}
+.instrument-card .emoji{font-size:25px}
+.instrument-card h3{font-size:13px;margin:9px 0 4px}
+.instrument-card p{font-size:11px;color:#aeb5c3;margin:0}
+.detail{background:#1d2027;border-radius:7px;padding:14px;margin-top:15px}
+.detail p{font-size:12px;color:#aeb5c3}
+.add-button{background:#526f9b}
+@media(max-width:650px){
+ main{grid-template-columns:120px minmax(0,1fr)}
+ aside{padding:8px}
+ .track-name,.ruler-label{width:95px}
+ header{padding:0 8px}
+ .logo{font-size:16px}
+ .transport{gap:4px;padding:0 5px}
+ .help{height:65px}
 }
 </style>
 </head>
 <body>
 
+<!-- HOME SCREEN -->
+<section id="home">
+  <div class="home-header">
+    <div class="logo">UGYA DAW</div>
+    <span style="color:#aeb5c3;font-size:12px">BROWSER MUSIC STUDIO</span>
+  </div>
+  <div class="home-main">
+    <h2>Make something great.</h2>
+    <p class="home-sub">Your music production workspace.</p>
+    <div class="home-actions">
+      <div class="home-card" onclick="newProject()">
+        <div class="big-icon">＋</div>
+        <h3>New Project</h3>
+        <p>Start creating music from scratch.</p>
+      </div>
+      <div class="home-card" onclick="document.getElementById('open-file').click()">
+        <div class="big-icon">📂</div>
+        <h3>Open Project</h3>
+        <p>Open a saved UGYA DAW project file.</p>
+      </div>
+    </div>
+    <div class="recent-title">RECENT PROJECTS</div>
+    <div id="recent-list"></div>
+  </div>
+  <input type="file" id="open-file" accept=".json" hidden onchange="openProjectFile(event)">
+</section>
+
+<!-- PROJECT SCREEN -->
+<section id="project" class="hidden">
 <header>
-  <h1>UGYA DAW</h1>
-  <div class="transport">
-    <button title="Play">▶</button>
-    <button title="Stop">■</button>
-    BPM <input type="number" value="120" min="30" max="300">
+  <div class="logo">UGYA DAW</div>
+  <button onclick="goHome()">⌂ Home</button>
+  <div class="header-actions">
+    <button onclick="saveProject()">Save</button>
+    <button onclick="downloadProject()">Export</button>
   </div>
 </header>
 
 <main>
 <aside>
   <div class="section-title">PROJECT</div>
-  <div class="menu-item active" onclick="showHelp('Arrangement')">▤ Arrangement</div>
+  <div class="menu-item" onclick="showHelp('Arrangement')">▤ Arrangement</div>
   <div class="menu-item" onclick="openLibrary()">＋ Instrument Library</div>
-
   <div class="section-title">EFFECTS</div>
   <div class="menu-item" onclick="showHelp('Master FX')">◈ Master FX</div>
   <div class="menu-item" onclick="showHelp('Send FX')">◈ Send FX</div>
-
   <div class="section-title">SETTINGS</div>
   <div class="menu-item" onclick="showHelp('Settings')">⚙ Settings</div>
 </aside>
 
 <section class="workspace">
   <div class="toolbar">
-    <strong>Arrangement</strong>
-    <span style="margin-left:auto">4/4　|　120 BPM</span>
+    <strong id="project-title">Untitled Project</strong>
+    <span id="track-count">0 tracks</span>
+    <div class="zoom-tools">
+      <button onclick="changeZoom(-0.1)">−</button>
+      <span id="zoom-label">100%</span>
+      <button onclick="changeZoom(0.1)">＋</button>
+      <button onclick="resetZoom()">Fit</button>
+    </div>
   </div>
 
-  <div class="timeline" id="timeline">
-    <div class="empty" id="empty">
-      <div class="symbol">♫</div>
-      <strong>No tracks yet</strong>
-      <span>Add instruments from the Library to start creating music.</span>
-      <button onclick="openLibrary()">＋ Open Instrument Library</button>
+  <div class="timeline-scroll" id="timeline-scroll">
+    <div class="ruler-row">
+      <div class="ruler-label"></div>
+      <div class="ruler" id="ruler"></div>
     </div>
+    <div id="tracks-area"></div>
   </div>
 
   <div class="help">
     <h3 id="help-title">HELP / INFORMATION</h3>
     <p id="help-text">Welcome to UGYA DAW. Add instruments from the library to begin.</p>
   </div>
+
+  <div class="transport">
+    <button onclick="toStart()" title="Go to start">|◀</button>
+    <button class="play" id="play-button" onclick="togglePlay()">▶</button>
+    <button onclick="stopPlay()">■</button>
+    <button class="record" id="record-button" onclick="toggleRecord()">●</button>
+    <button id="loop-button" onclick="toggleLoop()">↻</button>
+    <div class="time-display" id="time-display">00:00:00</div>
+    <label>BPM <input id="bpm" type="number" min="30" max="300" value="120" onchange="updateBPM()"></label>
+    <label>4/4</label>
+  </div>
 </section>
 </main>
+</section>
 
+<!-- INSTRUMENT LIBRARY -->
 <div class="modal" id="library">
-  <div class="modal-content">
-    <div class="modal-head">
-      <h2>Instrument Library</h2>
-      <button onclick="closeLibrary()">✕</button>
-    </div>
-
-    <input id="search" placeholder="Search instruments..."
-      style="width:100%;margin-top:15px"
-      oninput="renderLibrary()">
-
-    <div class="categories" id="categories"></div>
-    <div class="instrument-grid" id="instrument-grid"></div>
-    <div class="detail" id="detail">
-      <p style="color:#aeb5c3">Select an instrument to see its details.</p>
-    </div>
+<div class="modal-content">
+  <div class="modal-head">
+    <h2>Instrument Library</h2>
+    <button onclick="closeLibrary()">✕</button>
   </div>
+  <input id="search" placeholder="Search instruments..." style="width:100%;margin:10px 0" oninput="renderLibrary()">
+  <div class="categories" id="categories"></div>
+  <div class="instrument-grid" id="instrument-grid"></div>
+  <div class="detail" id="detail">
+    <p>Select an instrument to see its details.</p>
+  </div>
+</div>
 </div>
 
 <script>
-const instruments = [
-  {name:"Grand Piano",cat:"Keyboards",icon:"🎹",desc:"A rich acoustic grand piano sound.",type:"Keyboard"},
-  {name:"Electric Piano",cat:"Keyboards",icon:"🎹",desc:"A warm electric piano sound.",type:"Keyboard"},
-  {name:"Organ",cat:"Keyboards",icon:"🎹",desc:"A classic organ sound.",type:"Keyboard"},
-  {name:"Synth Lead",cat:"Synthesizers",icon:"🎛️",desc:"A bright lead synthesizer.",type:"Synth"},
-  {name:"Synth Pad",cat:"Synthesizers",icon:"🌌",desc:"A smooth atmospheric synthesizer.",type:"Synth"},
-  {name:"Synth Pluck",cat:"Synthesizers",icon:"✨",desc:"A short, bright pluck sound.",type:"Synth"},
-  {name:"Sub Bass",cat:"Bass",icon:"🔊",desc:"A deep sub bass sound.",type:"Bass"},
-  {name:"Synth Bass",cat:"Bass",icon:"🎸",desc:"An electronic bass sound.",type:"Bass"},
-  {name:"Electric Bass",cat:"Bass",icon:"🎸",desc:"An electric bass instrument.",type:"Bass"},
-  {name:"Acoustic Drums",cat:"Drums",icon:"🥁",desc:"A natural acoustic drum kit.",type:"Drums"},
-  {name:"Electronic Drums",cat:"Drums",icon:"🥁",desc:"An electronic drum kit.",type:"Drums"},
-  {name:"Acoustic Guitar",cat:"Guitars",icon:"🎸",desc:"A natural acoustic guitar.",type:"Guitar"},
-  {name:"Electric Guitar",cat:"Guitars",icon:"🎸",desc:"An electric guitar sound.",type:"Guitar"},
-  {name:"Vocal",cat:"Vocals",icon:"🎤",desc:"A vocal audio track.",type:"Audio"},
-  {name:"Atmosphere",cat:"Sound Effects",icon:"🌫️",desc:"An atmospheric sound effect.",type:"Audio"},
-  {name:"Audio Loop",cat:"Audio Loops",icon:"🔁",desc:"An audio loop track.",type:"Audio"}
+const instruments=[
+{name:"Grand Piano",cat:"Keyboards",icon:"🎹",desc:"A rich acoustic grand piano sound.",type:"Keyboard"},
+{name:"Electric Piano",cat:"Keyboards",icon:"🎹",desc:"A warm electric piano sound.",type:"Keyboard"},
+{name:"Organ",cat:"Keyboards",icon:"🎹",desc:"A classic organ sound.",type:"Keyboard"},
+{name:"Synth Lead",cat:"Synthesizers",icon:"🎛️",desc:"A bright lead synthesizer.",type:"Synth"},
+{name:"Synth Pad",cat:"Synthesizers",icon:"🌌",desc:"A smooth atmospheric synthesizer.",type:"Synth"},
+{name:"Synth Pluck",cat:"Synthesizers",icon:"✨",desc:"A short, bright pluck sound.",type:"Synth"},
+{name:"Sub Bass",cat:"Bass",icon:"🔊",desc:"A deep sub bass sound.",type:"Bass"},
+{name:"Synth Bass",cat:"Bass",icon:"🎸",desc:"An electronic bass sound.",type:"Bass"},
+{name:"Electric Bass",cat:"Bass",icon:"🎸",desc:"An electric bass instrument.",type:"Bass"},
+{name:"Acoustic Drums",cat:"Drums",icon:"🥁",desc:"A natural acoustic drum kit.",type:"Drums"},
+{name:"Electronic Drums",cat:"Drums",icon:"🥁",desc:"An electronic drum kit.",type:"Drums"},
+{name:"Acoustic Guitar",cat:"Guitars",icon:"🎸",desc:"A natural acoustic guitar.",type:"Guitar"},
+{name:"Electric Guitar",cat:"Guitars",icon:"🎸",desc:"An electric guitar sound.",type:"Guitar"},
+{name:"Vocal",cat:"Vocals",icon:"🎤",desc:"A vocal audio track.",type:"Audio"},
+{name:"Atmosphere",cat:"Sound Effects",icon:"🌫️",desc:"An atmospheric sound effect.",type:"Audio"},
+{name:"Audio Loop",cat:"Audio Loops",icon:"🔁",desc:"An audio loop track.",type:"Audio"}
 ];
+const cats=["All","Keyboards","Synthesizers","Bass","Drums","Guitars","Vocals","Sound Effects","Audio Loops"];
+let activeCategory="All",selectedInstrument=null,tracks=[];
+let projectName="Untitled Project",zoom=1,playing=false,recording=false,looping=false;
+let playPosition=0,lastFrame=0,animationId=null,bpm=120;
 
-const cats = ["All","Keyboards","Synthesizers","Bass","Drums","Guitars","Vocals","Sound Effects","Audio Loops"];
-let activeCategory = "All";
-let selectedInstrument = null;
-let tracks = [];
-
-function openLibrary() {
-  document.getElementById("library").classList.add("open");
-  renderLibrary();
-  showHelp("Instrument Library");
+function newProject(){
+  const name=prompt("Project name:","Untitled Project");
+  if(name===null)return;
+  projectName=name.trim()||"Untitled Project";
+  tracks=[];playPosition=0;zoom=1;
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("project").classList.remove("hidden");
+  document.getElementById("project-title").textContent=projectName;
+  renderTracks();updateTime();updateZoom();
+  showHelp("Arrangement");
 }
-function closeLibrary() {
-  document.getElementById("library").classList.remove("open");
+function goHome(){
+  stopPlay();
+  document.getElementById("project").classList.add("hidden");
+  document.getElementById("home").classList.remove("hidden");
+  renderRecent();
 }
-function renderLibrary() {
-  const categoryBox = document.getElementById("categories");
-  categoryBox.innerHTML = "";
-  cats.forEach(cat => {
-    const b = document.createElement("button");
-    b.textContent = cat;
-    b.className = "category" + (cat === activeCategory ? " active" : "");
-    b.onclick = () => {
-      activeCategory = cat;
-      selectedInstrument = null;
-      renderLibrary();
-    };
-    categoryBox.appendChild(b);
-  });
-
-  const query = document.getElementById("search").value.toLowerCase();
-  const grid = document.getElementById("instrument-grid");
-  grid.innerHTML = "";
-
-  instruments.filter(item =>
-    (activeCategory === "All" || item.cat === activeCategory) &&
-    item.name.toLowerCase().includes(query)
-  ).forEach(item => {
-    const card = document.createElement("div");
-    card.className = "instrument-card" +
-      (selectedInstrument === item ? " selected" : "");
-    card.innerHTML = `
-      <div class="emoji">${item.icon}</div>
-      <h3>${item.name}</h3>
-      <p>${item.cat}</p>
-    `;
-    card.onclick = () => {
-      selectedInstrument = item;
-      renderLibrary();
-    };
-    grid.appendChild(card);
-  });
-
-  const detail = document.getElementById("detail");
-  if(selectedInstrument) {
-    detail.innerHTML = `
-      <h3>${selectedInstrument.icon} ${selectedInstrument.name}</h3>
-      <p>${selectedInstrument.desc}</p>
-      <p style="font-size:12px;color:#aeb5c3">
-        Category: ${selectedInstrument.cat}
-      </p>
-      <button class="add-button" id="add-instrument">
-        ＋ Add to Project
-      </button>
-    `;
-    document.getElementById("add-instrument").onclick = addInstrument;
-  } else {
-    detail.innerHTML = '<p style="color:#aeb5c3">Select an instrument to see its details.</p>';
-  }
+function saveProject(){
+  const data={name:projectName,tracks,bpm,updated:new Date().toISOString()};
+  let projects=JSON.parse(localStorage.getItem("ugya-projects")||"[]");
+  projects=projects.filter(p=>p.name!==projectName);
+  projects.unshift(data);
+  localStorage.setItem("ugya-projects",JSON.stringify(projects.slice(0,15)));
+  showHelp("Project saved");
+  renderRecent();
 }
-function addInstrument() {
-  if(!selectedInstrument) return;
-  tracks.push({
-    id: Date.now() + Math.random(),
-    name: selectedInstrument.name,
-    icon: selectedInstrument.icon,
-    type: selectedInstrument.type
-  });
-  renderTracks();
-  closeLibrary();
-  showHelp(selectedInstrument.name);
+function downloadProject(){
+  const data={name:projectName,tracks,bpm,zoom};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=projectName.replace(/[^\w-]/g,"_")+".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
-function renderTracks() {
-  const timeline = document.getElementById("timeline");
-  timeline.innerHTML = "";
-
-  if(tracks.length === 0) {
-    timeline.innerHTML = `
-      <div class="empty">
-        <div class="symbol">♫</div>
-        <strong>No tracks yet</strong>
-        <span>Add instruments from the Library to start creating music.</span>
-        <button onclick="openLibrary()">＋ Open Instrument Library</button>
-      </div>`;
+function openProjectFile(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      projectName=data.name||"Imported Project";
+      tracks=Array.isArray(data.tracks)?data.tracks:[];
+      bpm=data.bpm||120;
+      zoom=data.zoom||1;
+      document.getElementById("bpm").value=bpm;
+      document.getElementById("project-title").textContent=projectName;
+      document.getElementById("home").classList.add("hidden");
+      document.getElementById("project").classList.remove("hidden");
+      renderTracks();updateZoom();
+    }catch(e){alert("Invalid project file.");}
+  };
+  reader.readAsText(file);
+  event.target.value="";
+}
+function renderRecent(){
+  const list=document.getElementById("recent-list");
+  const projects=JSON.parse(localStorage.getItem("ugya-projects")||"[]");
+  list.innerHTML="";
+  if(!projects.length){
+    list.innerHTML='<p style="color:#8993a4;font-size:13px">No recent projects yet.</p>';
     return;
   }
-
-  tracks.forEach(track => {
-    const row = document.createElement("div");
-    row.className = "track";
-    row.innerHTML = `
-      <div class="track-name">
-        <strong>${track.icon} ${track.name}</strong>
-        <button class="delete-track">Remove</button>
-      </div>
-      <div class="track-content"></div>
-    `;
-    row.querySelector("button").onclick = () => {
-      tracks = tracks.filter(t => t.id !== track.id);
-      renderTracks();
-      showHelp("Track removed");
+  projects.forEach(p=>{
+    const item=document.createElement("div");
+    item.className="recent-item";
+    item.innerHTML=`<strong>${escapeHTML(p.name)}</strong><small>${p.tracks.length} tracks · ${new Date(p.updated).toLocaleString()}</small>`;
+    item.onclick=()=>{
+      projectName=p.name;tracks=p.tracks||[];bpm=p.bpm||120;
+      document.getElementById("bpm").value=bpm;
+      document.getElementById("project-title").textContent=projectName;
+      document.getElementById("home").classList.add("hidden");
+      document.getElementById("project").classList.remove("hidden");
+      renderTracks();updateZoom();
     };
-    timeline.appendChild(row);
+    list.appendChild(item);
   });
 }
-function showHelp(topic) {
-  const descriptions = {
-    "Arrangement":"This is your project timeline. Add instruments from the library to create tracks.",
-    "Instrument Library":"Browse instruments, select a sound and add it to your project.",
-    "Master FX":"Manage effects applied to the entire project. Effects will be available here in a future update.",
-    "Send FX":"Share effects such as Reverb between multiple tracks.",
-    "Settings":"Configure your project settings.",
-    "Track removed":"The selected track has been removed from your project."
-  };
-  document.getElementById("help-title").textContent = "HELP / " + topic.toUpperCase();
-  document.getElementById("help-text").textContent =
-    descriptions[topic] || "Instrument selected. Track controls will be available here.";
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
+
+/* LIBRARY */
+function openLibrary(){
+  document.getElementById("library").classList.add("open");
+  renderLibrary();
+}
+function closeLibrary(){document.getElementById("library").classList.remove("open")}
+function renderLibrary(){
+  const categoryBox=document.getElementById("categories");
+  categoryBox.innerHTML="";
+  cats.forEach(cat=>{
+    const b=document.createElement("button");
+    b.textContent=cat;b.className="category"+(cat===activeCategory?" active":"");
+    b.onclick=()=>{activeCategory=cat;selectedInstrument=null;renderLibrary()};
+    categoryBox.appendChild(b);
+  });
+  const query=document.getElementById("search").value.toLowerCase();
+  const grid=document.getElementById("instrument-grid");
+  grid.innerHTML="";
+  instruments.filter(item=>(activeCategory==="All"||item.cat===activeCategory)&&item.name.toLowerCase().includes(query)).forEach(item=>{
+    const card=document.createElement("div");
+    card.className="instrument-card"+(selectedInstrument===item?" selected":"");
+    card.innerHTML=`<div class="emoji">${item.icon}</div><h3>${item.name}</h3><p>${item.cat}</p>`;
+    card.onclick=()=>{selectedInstrument=item;renderLibrary()};
+    grid.appendChild(card);
+  });
+  const detail=document.getElementById("detail");
+  if(selectedInstrument){
+    detail.innerHTML=`<h3>${selectedInstrument.icon} ${selectedInstrument.name}</h3><p>${selectedInstrument.desc}</p><button class="add-button" id="add-instrument">＋ Add to Project</button>`;
+    document.getElementById("add-instrument").onclick=addInstrument;
+  }else detail.innerHTML='<p>Select an instrument to see its details.</p>';
+}
+function addInstrument(){
+  if(!selectedInstrument)return;
+  tracks.push({id:Date.now()+Math.random(),name:selectedInstrument.name,icon:selectedInstrument.icon,type:selectedInstrument.type});
+  renderTracks();closeLibrary();showHelp(selectedInstrument.name);
+}
+
+/* ARRANGEMENT */
+function renderTracks(){
+  const area=document.getElementById("tracks-area");
+  area.innerHTML="";
+  document.getElementById("track-count").textContent=tracks.length+" tracks";
+  if(!tracks.length){
+    area.innerHTML='<div class="empty"><div class="empty-icon">♫</div><strong>No tracks yet</strong><span>Add instruments from the Library to start creating music.</span><button onclick="openLibrary()">＋ Open Instrument Library</button></div>';
+    renderRuler();
+    return;
+  }
+  tracks.forEach(track=>{
+    const row=document.createElement("div");
+    row.className="track";
+    row.innerHTML=`<div class="track-name"><strong>${track.icon} ${escapeHTML(track.name)}</strong><button>Remove</button></div><div class="track-content"></div>`;
+    row.querySelector("button").onclick=()=>{
+      tracks=tracks.filter(t=>t.id!==track.id);renderTracks();showHelp("Track removed");
+    };
+    row.querySelector(".track-content").style.width=timelineWidth()+"px";
+    area.appendChild(row);
+  });
+  renderRuler();
+}
+function timelineWidth(){return 1800*zoom}
+function renderRuler(){
+  const ruler=document.getElementById("ruler");
+  ruler.style.width=timelineWidth()+"px";ruler.innerHTML="";
+  for(let i=0;i<=32;i++){
+    const mark=document.createElement("span");
+    mark.className="ruler-mark";mark.style.left=(i*60*zoom+5)+"px";
+    mark.textContent=i+1;ruler.appendChild(mark);
+  }
+  document.querySelectorAll(".track-content").forEach(el=>el.style.width=timelineWidth()+"px");
+  updatePlayhead();
+}
+function updateZoom(){
+  zoom=Math.max(.25,Math.min(4,zoom));
+  document.getElementById("zoom-label").textContent=Math.round(zoom*100)+"%";
+  renderRuler();
+}
+function changeZoom(amount){zoom+=amount;updateZoom()}
+function resetZoom(){zoom=1;updateZoom()}
+
+/* CTRL + SCROLL ZOOM */
+document.getElementById("timeline-scroll").addEventListener("wheel",e=>{
+  if(!e.ctrlKey)return;
+  e.preventDefault();
+  const container=e.currentTarget;
+  const rect=container.getBoundingClientRect();
+  const mouseX=e.clientX-rect.left;
+  const oldZoom=zoom;
+  const contentX=container.scrollLeft+mouseX;
+  zoom=Math.max(.25,Math.min(4,zoom*(e.deltaY<0?1.12:1/1.12)));
+  updateZoom();
+  container.scrollLeft=contentX*(zoom/oldZoom)-mouseX;
+},{passive:false});
+
+/* TRANSPORT */
+function togglePlay(){
+  if(playing){pausePlay();return}
+  playing=true;lastFrame=0;
+  document.getElementById("play-button").textContent="Ⅱ";
+  animationId=requestAnimationFrame(playFrame);
+}
+function playFrame(timestamp){
+  if(!playing)return;
+  if(lastFrame){
+    playPosition+=(timestamp-lastFrame)/1000;
+  }
+  lastFrame=timestamp;
+  updateTime();updatePlayhead();
+  animationId=requestAnimationFrame(playFrame);
+}
+function pausePlay(){
+  playing=false;cancelAnimationFrame(animationId);
+  document.getElementById("play-button").textContent="▶";
+}
+function stopPlay(){pausePlay();playPosition=0;updateTime();updatePlayhead()}
+function toStart(){playPosition=0;updateTime();updatePlayhead()}
+function toggleRecord(){
+  recording=!recording;
+  document.getElementById("record-button").style.background=recording?"#8d3434":"";
+  showHelp(recording?"Recording mode":"Recording stopped");
+}
+function toggleLoop(){
+  looping=!looping;
+  document.getElementById("loop-button").classList.toggle("loop-active",looping);
+  showHelp(looping?"Loop enabled":"Loop disabled");
+}
+function updateBPM(){
+  bpm=Math.max(30,Math.min(300,Number(document.getElementById("bpm").value)||120));
+}
+function updateTime(){
+  const total=Math.floor(playPosition);
+  const min=String(Math.floor(total/60)).padStart(2,"0");
+  const sec=String(total%60).padStart(2,"0");
+  const ms=String(Math.floor((playPosition%1)*100)).padStart(2,"0");
+  document.getElementById("time-display").textContent=`${min}:${sec}:${ms}`;
+}
+function updatePlayhead(){
+  let head=document.getElementById("playhead");
+  if(!head){
+    head=document.createElement("div");head.id="playhead";head.className="playhead";
+    document.getElementById("tracks-area").appendChild(head);
+  }
+  head.style.left=(140+playPosition*30*zoom)+"px";
+}
+function showHelp(topic){
+  const descriptions={
+    "Arrangement":"View and organize all instruments and audio clips across your song.",
+    "Master FX":"Manage effects applied to the entire project.",
+    "Send FX":"Share effects such as Reverb between multiple tracks.",
+    "Settings":"Configure project settings.",
+    "Project saved":"Project saved in this browser.",
+    "Track removed":"The selected track has been removed."
+  };
+  document.getElementById("help-title").textContent="HELP / "+topic.toUpperCase();
+  document.getElementById("help-text").textContent=descriptions[topic]||"Selected: "+topic+". More controls will be available as development continues.";
+}
+renderRecent();
 </script>
 </body>
 </html>
