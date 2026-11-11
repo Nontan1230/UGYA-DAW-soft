@@ -2,187 +2,434 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UGYA DAW</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #17191e;
-      color: #e8eaf0;
-      font-family: Arial, sans-serif;
-    }
-    header {
-      height: 64px;
-      background: #22252c;
-      display: flex;
-      align-items: center;
-      padding: 0 22px;
-      gap: 24px;
-      border-bottom: 1px solid #383c46;
-    }
-    header h1 { font-size: 21px; margin: 0; }
-    .transport {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-left: auto;
-    }
-    button, input {
-      background: #30343e;
-      color: white;
-      border: 1px solid #484e5b;
-      border-radius: 6px;
-      padding: 9px 13px;
-    }
-    button { cursor: pointer; }
-    button:hover { background: #414754; }
-    main {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      height: calc(100vh - 64px);
-    }
-    aside {
-      background: #20232a;
-      border-right: 1px solid #383c46;
-      padding: 16px;
-      overflow: auto;
-    }
-    aside h3 { font-size: 14px; color: #aeb5c3; }
-    .instrument {
-      padding: 13px;
-      background: #2b2f38;
-      margin-bottom: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .instrument:hover { background: #414754; }
-    .workspace {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .toolbar {
-      height: 52px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 16px;
-      background: #242830;
-    }
-    .timeline {
-      flex: 1;
-      overflow: auto;
-      padding: 16px;
-    }
-    .track {
-      display: flex;
-      height: 76px;
-      margin-bottom: 7px;
-      background: #242830;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-    .track-name {
-      width: 130px;
-      flex-shrink: 0;
-      padding: 15px 10px;
-      background: #30343e;
-      font-size: 13px;
-    }
-    .track-content {
-      flex: 1;
-      position: relative;
-      background-image: linear-gradient(
-        90deg, transparent 98%, #3b404a 98%
-      );
-      background-size: 60px 100%;
-    }
-    .clip {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 180px;
-      height: 55px;
-      border-radius: 5px;
-      background: #5686bd;
-    }
-    .help {
-      background: #20232a;
-      padding: 14px 20px;
-      border-top: 1px solid #383c46;
-      min-height: 90px;
-    }
-    .help h3 { margin: 0 0 7px; font-size: 14px; }
-    .help p { margin: 0; color: #aeb5c3; font-size: 12px; }
-    @media(max-width:650px) {
-      main { grid-template-columns: 120px 1fr; }
-      .track-name { width: 85px; }
-      aside { padding: 8px; }
-      header { padding: 0 10px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UGYA DAW</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #17191e;
+  color: #e8eaf0;
+  font-family: Arial, sans-serif;
+}
+button, input { font: inherit; }
+button {
+  color: white;
+  background: #30343e;
+  border: 1px solid #484e5b;
+  padding: 9px 13px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover { background: #444b59; }
+header {
+  height: 64px;
+  background: #22252c;
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  border-bottom: 1px solid #383c46;
+}
+header h1 { font-size: 21px; }
+.transport {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+input {
+  background: #30343e;
+  color: white;
+  border: 1px solid #484e5b;
+  padding: 8px;
+  border-radius: 5px;
+  width: 65px;
+}
+main {
+  display: grid;
+  grid-template-columns: 245px minmax(0,1fr);
+  height: calc(100vh - 64px);
+}
+aside {
+  background: #20232a;
+  border-right: 1px solid #383c46;
+  padding: 16px;
+  overflow-y: auto;
+}
+.section-title {
+  color: #aeb5c3;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 22px 0 10px;
+  letter-spacing: 1px;
+}
+.menu-item {
+  padding: 12px;
+  background: #2b2f38;
+  border-radius: 6px;
+  margin-bottom: 7px;
+  cursor: pointer;
+}
+.menu-item:hover, .menu-item.active {
+  background: #414754;
+}
+.workspace {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.toolbar {
+  height: 58px;
+  flex-shrink: 0;
+  background: #242830;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+}
+.toolbar span { color: #aeb5c3; }
+.timeline {
+  flex: 1;
+  overflow: auto;
+  padding: 18px;
+}
+.track {
+  display: flex;
+  height: 75px;
+  margin-bottom: 8px;
+  background: #252932;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.track-name {
+  width: 150px;
+  flex-shrink: 0;
+  background: #30343e;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.track-name small { color: #aeb5c3; }
+.track-content {
+  flex: 1;
+  min-width: 300px;
+  background-image: linear-gradient(
+    90deg, transparent 98%, #3b404a 98%
+  );
+  background-size: 60px 100%;
+}
+.delete-track {
+  font-size: 11px;
+  padding: 3px 6px;
+  width: fit-content;
+}
+.empty {
+  height: 100%;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #aeb5c3;
+  text-align: center;
+  gap: 12px;
+}
+.empty strong { font-size: 19px; color: white; }
+.empty .symbol { font-size: 42px; }
+.help {
+  background: #20232a;
+  border-top: 1px solid #383c46;
+  padding: 15px 22px;
+  min-height: 95px;
+  flex-shrink: 0;
+}
+.help h3 { margin: 0 0 7px; font-size: 13px; }
+.help p { margin: 0; font-size: 12px; color: #aeb5c3; }
+.modal {
+  position: fixed;
+  inset: 0;
+  background: #0009;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  padding: 15px;
+}
+.modal.open { display: flex; }
+.modal-content {
+  background: #252932;
+  border: 1px solid #484e5b;
+  border-radius: 12px;
+  width: min(650px, 100%);
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 22px;
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-head h2 { margin: 0; }
+.categories {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+.category { font-size: 12px; }
+.category.active { background: #596f9a; }
+.instrument-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(155px,1fr));
+  gap: 10px;
+}
+.instrument-card {
+  background: #30343e;
+  border: 1px solid #484e5b;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.instrument-card:hover, .instrument-card.selected {
+  border-color: #7ca9e2;
+  background: #394457;
+}
+.instrument-card .emoji { font-size: 28px; }
+.instrument-card h3 { margin: 10px 0 5px; font-size: 14px; }
+.instrument-card p { margin: 0; font-size: 11px; color: #aeb5c3; }
+.detail {
+  margin-top: 17px;
+  padding: 15px;
+  background: #1d2027;
+  border-radius: 8px;
+}
+.detail h3 { margin-top: 0; }
+.add-button { background: #526f9b; }
+@media(max-width:650px) {
+  main { grid-template-columns: 125px minmax(0,1fr); }
+  aside { padding: 8px; }
+  .track-name { width: 90px; }
+  header { padding: 0 10px; }
+}
+</style>
 </head>
 <body>
-  <header>
-    <h1>UGYA DAW</h1>
-    <div class="transport">
-      <button>▶</button>
-      <button>■</button>
-      <label>BPM <input type="number" value="120" style="width:65px"></label>
+
+<header>
+  <h1>UGYA DAW</h1>
+  <div class="transport">
+    <button title="Play">▶</button>
+    <button title="Stop">■</button>
+    BPM <input type="number" value="120" min="30" max="300">
+  </div>
+</header>
+
+<main>
+<aside>
+  <div class="section-title">PROJECT</div>
+  <div class="menu-item active" onclick="showHelp('Arrangement')">▤ Arrangement</div>
+  <div class="menu-item" onclick="openLibrary()">＋ Instrument Library</div>
+
+  <div class="section-title">EFFECTS</div>
+  <div class="menu-item" onclick="showHelp('Master FX')">◈ Master FX</div>
+  <div class="menu-item" onclick="showHelp('Send FX')">◈ Send FX</div>
+
+  <div class="section-title">SETTINGS</div>
+  <div class="menu-item" onclick="showHelp('Settings')">⚙ Settings</div>
+</aside>
+
+<section class="workspace">
+  <div class="toolbar">
+    <strong>Arrangement</strong>
+    <span style="margin-left:auto">4/4　|　120 BPM</span>
+  </div>
+
+  <div class="timeline" id="timeline">
+    <div class="empty" id="empty">
+      <div class="symbol">♫</div>
+      <strong>No tracks yet</strong>
+      <span>Add instruments from the Library to start creating music.</span>
+      <button onclick="openLibrary()">＋ Open Instrument Library</button>
     </div>
-  </header>
+  </div>
 
-  <main>
-    <aside>
-      <h3>INSTRUMENTS</h3>
-      <div class="instrument">🎹 Piano</div>
-      <div class="instrument">🎸 Bass</div>
-      <div class="instrument">🥁 Drums</div>
-      <div class="instrument">🎛 Synth</div>
-      <h3>PROJECT</h3>
-      <div class="instrument">＋ Add Track</div>
-      <h3>EFFECTS</h3>
-      <div class="instrument">Master FX</div>
-    </aside>
+  <div class="help">
+    <h3 id="help-title">HELP / INFORMATION</h3>
+    <p id="help-text">Welcome to UGYA DAW. Add instruments from the library to begin.</p>
+  </div>
+</section>
+</main>
 
-    <section class="workspace">
-      <div class="toolbar">
-        <strong>Arrangement</strong>
-        <span style="margin-left:auto;color:#aeb5c3">
-          4/4　|　120 BPM
-        </span>
+<div class="modal" id="library">
+  <div class="modal-content">
+    <div class="modal-head">
+      <h2>Instrument Library</h2>
+      <button onclick="closeLibrary()">✕</button>
+    </div>
+
+    <input id="search" placeholder="Search instruments..."
+      style="width:100%;margin-top:15px"
+      oninput="renderLibrary()">
+
+    <div class="categories" id="categories"></div>
+    <div class="instrument-grid" id="instrument-grid"></div>
+    <div class="detail" id="detail">
+      <p style="color:#aeb5c3">Select an instrument to see its details.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const instruments = [
+  {name:"Grand Piano",cat:"Keyboards",icon:"🎹",desc:"A rich acoustic grand piano sound.",type:"Keyboard"},
+  {name:"Electric Piano",cat:"Keyboards",icon:"🎹",desc:"A warm electric piano sound.",type:"Keyboard"},
+  {name:"Organ",cat:"Keyboards",icon:"🎹",desc:"A classic organ sound.",type:"Keyboard"},
+  {name:"Synth Lead",cat:"Synthesizers",icon:"🎛️",desc:"A bright lead synthesizer.",type:"Synth"},
+  {name:"Synth Pad",cat:"Synthesizers",icon:"🌌",desc:"A smooth atmospheric synthesizer.",type:"Synth"},
+  {name:"Synth Pluck",cat:"Synthesizers",icon:"✨",desc:"A short, bright pluck sound.",type:"Synth"},
+  {name:"Sub Bass",cat:"Bass",icon:"🔊",desc:"A deep sub bass sound.",type:"Bass"},
+  {name:"Synth Bass",cat:"Bass",icon:"🎸",desc:"An electronic bass sound.",type:"Bass"},
+  {name:"Electric Bass",cat:"Bass",icon:"🎸",desc:"An electric bass instrument.",type:"Bass"},
+  {name:"Acoustic Drums",cat:"Drums",icon:"🥁",desc:"A natural acoustic drum kit.",type:"Drums"},
+  {name:"Electronic Drums",cat:"Drums",icon:"🥁",desc:"An electronic drum kit.",type:"Drums"},
+  {name:"Acoustic Guitar",cat:"Guitars",icon:"🎸",desc:"A natural acoustic guitar.",type:"Guitar"},
+  {name:"Electric Guitar",cat:"Guitars",icon:"🎸",desc:"An electric guitar sound.",type:"Guitar"},
+  {name:"Vocal",cat:"Vocals",icon:"🎤",desc:"A vocal audio track.",type:"Audio"},
+  {name:"Atmosphere",cat:"Sound Effects",icon:"🌫️",desc:"An atmospheric sound effect.",type:"Audio"},
+  {name:"Audio Loop",cat:"Audio Loops",icon:"🔁",desc:"An audio loop track.",type:"Audio"}
+];
+
+const cats = ["All","Keyboards","Synthesizers","Bass","Drums","Guitars","Vocals","Sound Effects","Audio Loops"];
+let activeCategory = "All";
+let selectedInstrument = null;
+let tracks = [];
+
+function openLibrary() {
+  document.getElementById("library").classList.add("open");
+  renderLibrary();
+  showHelp("Instrument Library");
+}
+function closeLibrary() {
+  document.getElementById("library").classList.remove("open");
+}
+function renderLibrary() {
+  const categoryBox = document.getElementById("categories");
+  categoryBox.innerHTML = "";
+  cats.forEach(cat => {
+    const b = document.createElement("button");
+    b.textContent = cat;
+    b.className = "category" + (cat === activeCategory ? " active" : "");
+    b.onclick = () => {
+      activeCategory = cat;
+      selectedInstrument = null;
+      renderLibrary();
+    };
+    categoryBox.appendChild(b);
+  });
+
+  const query = document.getElementById("search").value.toLowerCase();
+  const grid = document.getElementById("instrument-grid");
+  grid.innerHTML = "";
+
+  instruments.filter(item =>
+    (activeCategory === "All" || item.cat === activeCategory) &&
+    item.name.toLowerCase().includes(query)
+  ).forEach(item => {
+    const card = document.createElement("div");
+    card.className = "instrument-card" +
+      (selectedInstrument === item ? " selected" : "");
+    card.innerHTML = `
+      <div class="emoji">${item.icon}</div>
+      <h3>${item.name}</h3>
+      <p>${item.cat}</p>
+    `;
+    card.onclick = () => {
+      selectedInstrument = item;
+      renderLibrary();
+    };
+    grid.appendChild(card);
+  });
+
+  const detail = document.getElementById("detail");
+  if(selectedInstrument) {
+    detail.innerHTML = `
+      <h3>${selectedInstrument.icon} ${selectedInstrument.name}</h3>
+      <p>${selectedInstrument.desc}</p>
+      <p style="font-size:12px;color:#aeb5c3">
+        Category: ${selectedInstrument.cat}
+      </p>
+      <button class="add-button" id="add-instrument">
+        ＋ Add to Project
+      </button>
+    `;
+    document.getElementById("add-instrument").onclick = addInstrument;
+  } else {
+    detail.innerHTML = '<p style="color:#aeb5c3">Select an instrument to see its details.</p>';
+  }
+}
+function addInstrument() {
+  if(!selectedInstrument) return;
+  tracks.push({
+    id: Date.now() + Math.random(),
+    name: selectedInstrument.name,
+    icon: selectedInstrument.icon,
+    type: selectedInstrument.type
+  });
+  renderTracks();
+  closeLibrary();
+  showHelp(selectedInstrument.name);
+}
+function renderTracks() {
+  const timeline = document.getElementById("timeline");
+  timeline.innerHTML = "";
+
+  if(tracks.length === 0) {
+    timeline.innerHTML = `
+      <div class="empty">
+        <div class="symbol">♫</div>
+        <strong>No tracks yet</strong>
+        <span>Add instruments from the Library to start creating music.</span>
+        <button onclick="openLibrary()">＋ Open Instrument Library</button>
+      </div>`;
+    return;
+  }
+
+  tracks.forEach(track => {
+    const row = document.createElement("div");
+    row.className = "track";
+    row.innerHTML = `
+      <div class="track-name">
+        <strong>${track.icon} ${track.name}</strong>
+        <button class="delete-track">Remove</button>
       </div>
-
-      <div class="timeline">
-        <div class="track">
-          <div class="track-name">Piano</div>
-          <div class="track-content">
-            <div class="clip"></div>
-          </div>
-        </div>
-        <div class="track">
-          <div class="track-name">Bass</div>
-          <div class="track-content"></div>
-        </div>
-        <div class="track">
-          <div class="track-name">Drums</div>
-          <div class="track-content"></div>
-        </div>
-        <div class="track">
-          <div class="track-name">Synth</div>
-          <div class="track-content"></div>
-        </div>
-      </div>
-
-      <div class="help">
-        <h3>HELP / INFORMATION</h3>
-        <p>Welcome to UGYA DAW. Select an instrument to begin creating music.</p>
-      </div>
-    </section>
-  </main>
+      <div class="track-content"></div>
+    `;
+    row.querySelector("button").onclick = () => {
+      tracks = tracks.filter(t => t.id !== track.id);
+      renderTracks();
+      showHelp("Track removed");
+    };
+    timeline.appendChild(row);
+  });
+}
+function showHelp(topic) {
+  const descriptions = {
+    "Arrangement":"This is your project timeline. Add instruments from the library to create tracks.",
+    "Instrument Library":"Browse instruments, select a sound and add it to your project.",
+    "Master FX":"Manage effects applied to the entire project. Effects will be available here in a future update.",
+    "Send FX":"Share effects such as Reverb between multiple tracks.",
+    "Settings":"Configure your project settings.",
+    "Track removed":"The selected track has been removed from your project."
+  };
+  document.getElementById("help-title").textContent = "HELP / " + topic.toUpperCase();
+  document.getElementById("help-text").textContent =
+    descriptions[topic] || "Instrument selected. Track controls will be available here.";
+}
+</script>
 </body>
 </html>
-
