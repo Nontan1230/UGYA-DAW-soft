@@ -1,1 +1,188 @@
 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UGYA DAW</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #17191e;
+      color: #e8eaf0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      height: 64px;
+      background: #22252c;
+      display: flex;
+      align-items: center;
+      padding: 0 22px;
+      gap: 24px;
+      border-bottom: 1px solid #383c46;
+    }
+    header h1 { font-size: 21px; margin: 0; }
+    .transport {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+    }
+    button, input {
+      background: #30343e;
+      color: white;
+      border: 1px solid #484e5b;
+      border-radius: 6px;
+      padding: 9px 13px;
+    }
+    button { cursor: pointer; }
+    button:hover { background: #414754; }
+    main {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      height: calc(100vh - 64px);
+    }
+    aside {
+      background: #20232a;
+      border-right: 1px solid #383c46;
+      padding: 16px;
+      overflow: auto;
+    }
+    aside h3 { font-size: 14px; color: #aeb5c3; }
+    .instrument {
+      padding: 13px;
+      background: #2b2f38;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .instrument:hover { background: #414754; }
+    .workspace {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .toolbar {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      background: #242830;
+    }
+    .timeline {
+      flex: 1;
+      overflow: auto;
+      padding: 16px;
+    }
+    .track {
+      display: flex;
+      height: 76px;
+      margin-bottom: 7px;
+      background: #242830;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .track-name {
+      width: 130px;
+      flex-shrink: 0;
+      padding: 15px 10px;
+      background: #30343e;
+      font-size: 13px;
+    }
+    .track-content {
+      flex: 1;
+      position: relative;
+      background-image: linear-gradient(
+        90deg, transparent 98%, #3b404a 98%
+      );
+      background-size: 60px 100%;
+    }
+    .clip {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 180px;
+      height: 55px;
+      border-radius: 5px;
+      background: #5686bd;
+    }
+    .help {
+      background: #20232a;
+      padding: 14px 20px;
+      border-top: 1px solid #383c46;
+      min-height: 90px;
+    }
+    .help h3 { margin: 0 0 7px; font-size: 14px; }
+    .help p { margin: 0; color: #aeb5c3; font-size: 12px; }
+    @media(max-width:650px) {
+      main { grid-template-columns: 120px 1fr; }
+      .track-name { width: 85px; }
+      aside { padding: 8px; }
+      header { padding: 0 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>UGYA DAW</h1>
+    <div class="transport">
+      <button>▶</button>
+      <button>■</button>
+      <label>BPM <input type="number" value="120" style="width:65px"></label>
+    </div>
+  </header>
+
+  <main>
+    <aside>
+      <h3>INSTRUMENTS</h3>
+      <div class="instrument">🎹 Piano</div>
+      <div class="instrument">🎸 Bass</div>
+      <div class="instrument">🥁 Drums</div>
+      <div class="instrument">🎛 Synth</div>
+      <h3>PROJECT</h3>
+      <div class="instrument">＋ Add Track</div>
+      <h3>EFFECTS</h3>
+      <div class="instrument">Master FX</div>
+    </aside>
+
+    <section class="workspace">
+      <div class="toolbar">
+        <strong>Arrangement</strong>
+        <span style="margin-left:auto;color:#aeb5c3">
+          4/4　|　120 BPM
+        </span>
+      </div>
+
+      <div class="timeline">
+        <div class="track">
+          <div class="track-name">Piano</div>
+          <div class="track-content">
+            <div class="clip"></div>
+          </div>
+        </div>
+        <div class="track">
+          <div class="track-name">Bass</div>
+          <div class="track-content"></div>
+        </div>
+        <div class="track">
+          <div class="track-name">Drums</div>
+          <div class="track-content"></div>
+        </div>
+        <div class="track">
+          <div class="track-name">Synth</div>
+          <div class="track-content"></div>
+        </div>
+      </div>
+
+      <div class="help">
+        <h3>HELP / INFORMATION</h3>
+        <p>Welcome to UGYA DAW. Select an instrument to begin creating music.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+
